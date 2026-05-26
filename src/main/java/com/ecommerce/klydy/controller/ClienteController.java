@@ -25,7 +25,7 @@ public class ClienteController {
 
     @PostMapping
     public ClienteResponseDTO crear(@Valid @RequestBody ClienteRequestDTO dto) {
-        return clienteService.crearUsuario(dto);
+        return clienteService.crearCliente(dto);
     }
 
     @GetMapping
@@ -42,7 +42,7 @@ public class ClienteController {
             @PathVariable Long id,
             @Valid @RequestBody ClienteRequestDTO dto) {
 
-        return clienteService.actualizarUsuario(id, dto);
+        return clienteService.actualizarCliente(id, dto);
     }
 
     @DeleteMapping("/{id}")

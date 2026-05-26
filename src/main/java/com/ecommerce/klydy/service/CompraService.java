@@ -35,7 +35,7 @@ public class CompraService {
 
     public CompraResponseDTO crearCompra(CompraRequestDTO dto) {
 
-        Cliente cliente = clienteRepository.findById(dto.getUsuarioId())
+        Cliente cliente = clienteRepository.findById(dto.getClienteId())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         Compra compra = new Compra();

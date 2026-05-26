@@ -25,7 +25,7 @@ public class ClienteService {
 
     //metodos crud
 
-    public ClienteResponseDTO crearUsuario(ClienteRequestDTO dto) {
+    public ClienteResponseDTO crearCliente(ClienteRequestDTO dto) {
 
         Cliente cliente = new Cliente();
         cliente.setNombre(dto.getNombre());
@@ -61,7 +61,7 @@ public class ClienteService {
         return ClienteResponseDTO.desde(cliente);
     }
 
-    public ClienteResponseDTO actualizarUsuario(Long id, ClienteRequestDTO dto) {
+    public ClienteResponseDTO actualizarCliente(Long id, ClienteRequestDTO dto) {
 
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
