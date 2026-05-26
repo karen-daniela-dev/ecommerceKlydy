@@ -1,0 +1,68 @@
+package com.ecommerce.klydy.model;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Entity
+@Table(name = "compras")
+public class Compra {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idCompra;
+
+    private LocalDateTime fecha;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Usuario usuario;
+
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL)
+    private List<DetalleCompra> detalles;
+
+    public Compra() {
+    }
+
+    public Compra(Long idCompra, LocalDateTime fecha, Usuario usuario,
+                  List<DetalleCompra> detalles) {
+        this.idCompra = idCompra;
+        this.fecha = fecha;
+        this.usuario = usuario;
+        this.detalles = detalles;
+    }
+
+    //g & s
+
+
+    public Long getIdCompra() {
+        return idCompra;
+    }
+
+    public void setIdCompra(Long idCompra) {
+        this.idCompra = idCompra;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public List<DetalleCompra> getDetalles() {
+        return detalles;
+    }
+
+    public void setDetalles(List<DetalleCompra> detalles) {
+        this.detalles = detalles;
+    }
+}
