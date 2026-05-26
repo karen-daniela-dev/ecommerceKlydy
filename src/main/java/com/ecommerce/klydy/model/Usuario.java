@@ -1,16 +1,14 @@
 package com.ecommerce.klydy.model;
 
 import jakarta.persistence.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+
 
 import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Table(name = "usuarios")
-public class Usuario  implements UserDetails {
+public class Usuario  {
 
 
     @Id
@@ -60,36 +58,36 @@ public class Usuario  implements UserDetails {
     // getAuthorities: Spring Security llama a este método para saber
     // qué roles tiene el usuario. Retorna una lista de GrantedAuthority.
     // SimpleGrantedAuthority("ROLE_ADMIN") es el formato que Spring espera.
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + rol.name()));
-    }
-
-    // getUsername: Spring Security usa este campo como identificador.
-    // Aunque el mtodo se llama getUsername, nosotros usamos el email.
-    @Override
-    public String getUsername() {
-        return correo;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    // Los tres métodos siguientes controlan el estado de la cuenta.
-    // Retornan true para indicar que la cuenta está activa y habilitada.
-    @Override
-    public boolean isAccountNonExpired() { return true; }
-
-    @Override
-    public boolean isAccountNonLocked() { return true; }
-
-    @Override
-    public boolean isCredentialsNonExpired() { return true; }
-
-    @Override
-    public boolean isEnabled() { return true; }
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return List.of(new SimpleGrantedAuthority("ROLE_" + rol.name()));
+//    }
+//
+//    // getUsername: Spring Security usa este campo como identificador.
+//    // Aunque el mtodo se llama getUsername, nosotros usamos el email.
+//    @Override
+//    public String getUsername() {
+//        return correo;
+//    }
+//
+//    @Override
+//    public String getPassword() {
+//        return password;
+//    }
+//
+//    // Los tres métodos siguientes controlan el estado de la cuenta.
+//    // Retornan true para indicar que la cuenta está activa y habilitada.
+//    @Override
+//    public boolean isAccountNonExpired() { return true; }
+//
+//    @Override
+//    public boolean isAccountNonLocked() { return true; }
+//
+//    @Override
+//    public boolean isCredentialsNonExpired() { return true; }
+//
+//    @Override
+//    public boolean isEnabled() { return true; }
 
 
 
@@ -135,6 +133,10 @@ public class Usuario  implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+
+    }
+    public String getPassword() {
+        return password;
     }
 
     public Rol getRol() {
