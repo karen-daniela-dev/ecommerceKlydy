@@ -18,7 +18,7 @@ public class Cliente {
     private String cedula;
 
     @Column(unique = true, nullable = false)
-    private String correo;
+    private String email;
 
     @Column(nullable = false)
     private String telefono;
@@ -39,12 +39,12 @@ public class Cliente {
     }
 
     public Cliente(String nombre,
-                   String cedula, String correo, String telefono,
+                   String cedula, String email, String telefono,
                    String password, Rol rol) {
 
         this.nombre = nombre;
         this.cedula = cedula;
-        this.correo = correo;
+        this.email = email;
         this.telefono = telefono;
         this.password = password;
         this.rol = rol;
@@ -77,12 +77,12 @@ public class Cliente {
         this.cedula = cedula;
     }
 
-    public String getCorreo() {
-        return correo;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getTelefono() {

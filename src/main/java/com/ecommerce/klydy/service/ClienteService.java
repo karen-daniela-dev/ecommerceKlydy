@@ -29,7 +29,7 @@ public class ClienteService {
 
         Cliente cliente = new Cliente();
         cliente.setNombre(dto.getNombre());
-        cliente.setCorreo(dto.getCorreo());
+        cliente.setEmail(dto.getEmail());
         cliente.setTelefono(dto.getTelefono());
         cliente.setCedula(dto.getCedula());
 
@@ -67,7 +67,7 @@ public class ClienteService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         cliente.setNombre(dto.getNombre());
-        cliente.setCorreo(dto.getCorreo());
+        cliente.setEmail(dto.getEmail());
         cliente.setTelefono(dto.getTelefono());
 
         Cliente actualizado = clienteRepository.save(cliente);

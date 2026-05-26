@@ -6,7 +6,7 @@ public class ClienteResponseDTO {
 
     private Long id;
     private String nombre;
-    private String correo;
+    private String email;
     private String rol;
 
     public ClienteResponseDTO() {}
@@ -15,7 +15,7 @@ public class ClienteResponseDTO {
         ClienteResponseDTO dto = new ClienteResponseDTO();
         dto.id = u.getIdCliente();
         dto.nombre = u.getNombre();
-        dto.correo = u.getCorreo();
+        dto.email = u.getEmail();
         dto.rol = u.getRol().name();
         return dto;
     }
@@ -39,12 +39,12 @@ public class ClienteResponseDTO {
         this.nombre = nombre;
     }
 
-    public String getCorreo() {
-        return correo;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getRol() {

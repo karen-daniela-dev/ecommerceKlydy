@@ -4,7 +4,7 @@ public class ClienteRequestDTO {
 
     private String nombre;
     private String cedula;
-    private String correo;
+    private String email;
     private String telefono;
     private String password;
 
@@ -26,12 +26,12 @@ public class ClienteRequestDTO {
         this.cedula = cedula;
     }
 
-    public String getCorreo() {
-        return correo;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getTelefono() {
