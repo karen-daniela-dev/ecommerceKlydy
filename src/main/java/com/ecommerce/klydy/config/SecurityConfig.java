@@ -51,7 +51,7 @@ public class SecurityConfig {
                         // Consultas (GET): accesibles para CLIENTE y ADMIN.
                         .requestMatchers(HttpMethod.GET, "/productos/**").hasAnyRole("ADMIN", "CLIENTE")
                         .requestMatchers(HttpMethod.GET, "/clientes/**").hasAnyRole("ADMIN", "CLIENTE")
-                        .requestMatchers(HttpMethod.GET, "/ordenes/**").hasAnyRole("ADMIN", "CLIENTE")
+                        .requestMatchers(HttpMethod.GET, "/compras/**").hasAnyRole("ADMIN", "CLIENTE")
 
                         // Modificaciones: solo ADMIN puede crear, actualizar o eliminar.
                         .requestMatchers(HttpMethod.POST, "/productos/**").hasRole("ADMIN")
@@ -63,7 +63,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/clientes/**").hasRole("ADMIN")
 
                         // Órdenes: CLIENTE puede crear y ver sus propias órdenes.
-                        .requestMatchers(HttpMethod.POST, "/ordenes/**").hasAnyRole("ADMIN", "CLIENTE")
+                        .requestMatchers(HttpMethod.POST, "/compras/**").hasAnyRole("ADMIN", "CLIENTE")
 
                         // Todo lo demás requiere autenticación.
                         .anyRequest().authenticated()
