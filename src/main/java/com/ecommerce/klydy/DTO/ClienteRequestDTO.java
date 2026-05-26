@@ -1,6 +1,6 @@
 package com.ecommerce.klydy.DTO;
 
-public class UsuarioRequestDTO {
+public class ClienteRequestDTO {
 
     private String nombre;
     private String cedula;
@@ -8,7 +8,7 @@ public class UsuarioRequestDTO {
     private String telefono;
     private String password;
 
-    public UsuarioRequestDTO() {}
+    public ClienteRequestDTO() {}
 
     public String getNombre() {
         return nombre;

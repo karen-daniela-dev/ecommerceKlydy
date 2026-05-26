@@ -14,8 +14,8 @@ public class Compra {
     private LocalDateTime fecha;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private Usuario usuario;
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
 
     @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL)
     private List<DetalleCompra> detalles;
@@ -23,11 +23,11 @@ public class Compra {
     public Compra() {
     }
 
-    public Compra(Long idCompra, LocalDateTime fecha, Usuario usuario,
+    public Compra(Long idCompra, LocalDateTime fecha, Cliente cliente,
                   List<DetalleCompra> detalles) {
         this.idCompra = idCompra;
         this.fecha = fecha;
-        this.usuario = usuario;
+        this.cliente = cliente;
         this.detalles = detalles;
     }
 
@@ -50,12 +50,12 @@ public class Compra {
         this.fecha = fecha;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     public List<DetalleCompra> getDetalles() {

@@ -1,19 +1,19 @@
 package com.ecommerce.klydy.DTO;
 
-import com.ecommerce.klydy.model.Usuario;
+import com.ecommerce.klydy.model.Cliente;
 
-public class UsuarioResponseDTO {
+public class ClienteResponseDTO {
 
     private Long id;
     private String nombre;
     private String correo;
     private String rol;
 
-    public UsuarioResponseDTO() {}
+    public ClienteResponseDTO() {}
 
-    public static UsuarioResponseDTO desde(Usuario u) {
-        UsuarioResponseDTO dto = new UsuarioResponseDTO();
-        dto.id = u.getIdUsuario();
+    public static ClienteResponseDTO desde(Cliente u) {
+        ClienteResponseDTO dto = new ClienteResponseDTO();
+        dto.id = u.getIdCliente();
         dto.nombre = u.getNombre();
         dto.correo = u.getCorreo();
         dto.rol = u.getRol().name();

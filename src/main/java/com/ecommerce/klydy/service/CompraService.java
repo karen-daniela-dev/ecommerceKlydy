@@ -6,10 +6,10 @@ import com.ecommerce.klydy.DTO.DetalleCompraRequestDTO;
 import com.ecommerce.klydy.model.Compra;
 import com.ecommerce.klydy.model.DetalleCompra;
 import com.ecommerce.klydy.model.Producto;
-import com.ecommerce.klydy.model.Usuario;
+import com.ecommerce.klydy.model.Cliente;
 import com.ecommerce.klydy.repository.CompraRepository;
 import com.ecommerce.klydy.repository.ProductoRepository;
-import com.ecommerce.klydy.repository.UsuarioRepository;
+import com.ecommerce.klydy.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,25 +21,25 @@ import java.util.List;
 public class CompraService {
 
     private final CompraRepository compraRepository;
-    private final UsuarioRepository usuarioRepository;
+    private final ClienteRepository clienteRepository;
     private final ProductoRepository productoRepository;
 
     @Autowired
     public CompraService(CompraRepository compraRepository,
-                         UsuarioRepository usuarioRepository,
+                         ClienteRepository clienteRepository,
                          ProductoRepository productoRepository) {
         this.compraRepository = compraRepository;
-        this.usuarioRepository = usuarioRepository;
+        this.clienteRepository = clienteRepository;
         this.productoRepository = productoRepository;
     }
 
     public CompraResponseDTO crearCompra(CompraRequestDTO dto) {
 
-        Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
+        Cliente cliente = clienteRepository.findById(dto.getUsuarioId())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         Compra compra = new Compra();
-        compra.setUsuario(usuario);
+        compra.setCliente(cliente);
         compra.setFecha(LocalDateTime.now());
 
         List<DetalleCompra> detalles = new ArrayList<>();

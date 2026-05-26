@@ -14,7 +14,7 @@ public class CompraResponseDTO {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fecha;
-    private String usuarioNombre;
+    private String ClienteNombre;
     private List<DetalleCompraResponseDTO> detalles;
     private Double total;
 
@@ -25,7 +25,7 @@ public class CompraResponseDTO {
         CompraResponseDTO dto = new CompraResponseDTO();
 
         dto.id = compra.getIdCompra();
-        dto.usuarioNombre = compra.getUsuario().getNombre();
+        dto.ClienteNombre = compra.getCliente().getNombre();
         dto.fecha = compra.getFecha();
 
         List<DetalleCompraResponseDTO> lista = new ArrayList<>();
@@ -70,12 +70,12 @@ public class CompraResponseDTO {
         this.fecha = fecha;
     }
 
-    public String getUsuarioNombre() {
-        return usuarioNombre;
+    public String getClienteNombre() {
+        return ClienteNombre;
     }
 
-    public void setUsuarioNombre(String usuarioNombre) {
-        this.usuarioNombre = usuarioNombre;
+    public void setClienteNombre(String clienteNombre) {
+        this.ClienteNombre = clienteNombre;
     }
 
     public List<DetalleCompraResponseDTO> getDetalles() {
