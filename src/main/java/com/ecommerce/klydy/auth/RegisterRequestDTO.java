@@ -11,7 +11,10 @@ public class RegisterRequestDTO {
     private String nombre;
     private String email;
     private String password;
-    private Rol rol;
+
+    private String cedula;
+    private String telefono;
+
 
     public RegisterRequestDTO() {}
 
@@ -21,6 +24,11 @@ public class RegisterRequestDTO {
     public void setEmail(String email) { this.email = email; }
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
-    public Rol getRol() { return rol; }
-    public void setRol(Rol rol) { this.rol = rol; }
+
+    public String getCedula() { return cedula; }
+    public void setCedula(String cedula) { this.cedula = cedula; }
+
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
 }
+

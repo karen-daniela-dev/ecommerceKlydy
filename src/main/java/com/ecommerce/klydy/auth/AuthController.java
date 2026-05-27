@@ -1,8 +1,10 @@
 package com.ecommerce.klydy.auth;
 
 
+import com.ecommerce.klydy.model.Cliente;
 import com.ecommerce.klydy.model.Rol;
 import com.ecommerce.klydy.model.Usuario;
+import com.ecommerce.klydy.repository.ClienteRepository;
 import com.ecommerce.klydy.repository.UsuarioRepository;
 import com.ecommerce.klydy.security.JwtUtil;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
@@ -20,16 +23,17 @@ import java.util.Map;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-
+    private final ClienteRepository clienteRepository;
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
 
-    public AuthController(UsuarioRepository usuarioRepository,
+    public AuthController(UsuarioRepository usuarioRepository,ClienteRepository clienteRepository,
                           PasswordEncoder passwordEncoder,
                           AuthenticationManager authenticationManager,
                           JwtUtil jwtUtil) {
+        this.clienteRepository = clienteRepository;
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
@@ -39,6 +43,8 @@ public class AuthController {
     // register: recibe los datos del nuevo usuario, hashea la contraseña
     // y guarda el usuario en la base de datos.
     // Si el email ya existe, retorna 400 Bad Request.
+
+    @Transactional
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequestDTO request) {
 
@@ -53,10 +59,18 @@ public class AuthController {
                 request.getEmail(),
                 passwordEncoder.encode(request.getPassword()),
                 request.getNombre(),
-                request.getRol() != null ? request.getRol() : Rol.CLIENTE
+                Rol.CLIENTE
         );
 
         usuarioRepository.save(usuario);
+
+        Cliente cliente = new Cliente(
+                request.getNombre(),
+                request.getCedula(),
+                request.getTelefono(),
+                usuario
+        );
+        clienteRepository.save(cliente);
 
         return ResponseEntity.ok(Map.of(
                 "mensaje", "Usuario registrado exitosamente",
@@ -69,6 +83,7 @@ public class AuthController {
     // AuthenticationManager, y si son correctas genera y devuelve el token.
     // Si las credenciales son incorrectas, Spring Security lanza una excepción
     // que retorna automáticamente 401 Unauthorized.
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO request) {
 
@@ -87,11 +102,18 @@ public class AuthController {
         // Generar el token JWT con los datos del usuario.
         String token = jwtUtil.generateToken(usuario);
 
+        //  Buscar cliente asociado
+        Cliente cliente = clienteRepository
+                .findByUsuarioEmail(usuario.getEmail())
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+
         return ResponseEntity.ok(Map.of(
                 "token", token,
                 "email", usuario.getEmail(),
                 "rol", usuario.getRol(),
-                "nombre", usuario.getNombre()
+                "nombre", cliente.getNombre(),
+                "cedula", cliente.getCedula(),
+                "telefono", cliente.getTelefono()
         ));
     }
 }

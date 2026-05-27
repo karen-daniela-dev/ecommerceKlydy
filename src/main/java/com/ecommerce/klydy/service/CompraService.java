@@ -3,15 +3,13 @@ package com.ecommerce.klydy.service;
 import com.ecommerce.klydy.DTO.CompraRequestDTO;
 import com.ecommerce.klydy.DTO.CompraResponseDTO;
 import com.ecommerce.klydy.DTO.DetalleCompraRequestDTO;
-import com.ecommerce.klydy.model.Compra;
-import com.ecommerce.klydy.model.DetalleCompra;
-import com.ecommerce.klydy.model.Producto;
-import com.ecommerce.klydy.model.Cliente;
+import com.ecommerce.klydy.model.*;
 import com.ecommerce.klydy.repository.CompraRepository;
 import com.ecommerce.klydy.repository.ProductoRepository;
 import com.ecommerce.klydy.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,10 +31,12 @@ public class CompraService {
         this.productoRepository = productoRepository;
     }
 
-    public CompraResponseDTO crearCompra(CompraRequestDTO dto) {
+    @Transactional
+    public CompraResponseDTO crearCompra(CompraRequestDTO dto, Usuario usuario) {
 
-        Cliente cliente = clienteRepository.findById(dto.getClienteId())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Cliente cliente = clienteRepository
+                .findByUsuarioEmail(usuario.getEmail())
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
 
         Compra compra = new Compra();
         compra.setCliente(cliente);
