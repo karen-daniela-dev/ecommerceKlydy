@@ -38,10 +38,12 @@ public class ApplicationConfig {
     // coincide con el hash guardado en la base de datos.
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService());
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService());
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
+
 
     // AuthenticationManager: el coordinador del proceso de autenticación.
     // AuthController lo usará para ejecutar el login: recibe email + contraseña
