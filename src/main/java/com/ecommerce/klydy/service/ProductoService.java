@@ -19,6 +19,9 @@ public class ProductoService {
     public ProductoService(ProductoRepository productoRepository) {
         this.productoRepository = productoRepository;
     }
+    private String limpiar(String valor) {
+        return valor == null ? null : valor.trim();
+    }
 
     public ProductoResponseDTO crearProducto(ProductoRequestDTO dto) {
         if (dto.getStock() < 0) {
@@ -26,11 +29,11 @@ public class ProductoService {
         }
 
         Producto producto = new Producto();
-        producto.setNombre(dto.getNombre());
+        producto.setNombre(limpiar(dto.getNombre()));
         producto.setPrecio(dto.getPrecio());
         producto.setStock(dto.getStock());
-        producto.setDescripcion(dto.getDescripcion());
-        producto.setUrlImagen(dto.getUrlImagen());
+        producto.setDescripcion(limpiar(dto.getDescripcion()));
+        producto.setUrlImagen(limpiar(dto.getUrlImagen()));
         producto.setCategoria(dto.getCategoria());
         producto.setMarca(dto.getMarca());
         producto.setUso(dto.getUso());
