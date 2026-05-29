@@ -3,7 +3,7 @@ package com.ecommerce.klydy.model;
 public enum Categoria {
 
     LAPTOPS,
-    SMARWACHES,
+    SMARTWATCHES,
     MOUSES,
     AUDIO,
     TECLADOS,

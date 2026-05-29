@@ -3,7 +3,7 @@ package com.ecommerce.klydy.model;
 public enum Marca {
 
     SAMSUNG,
-    ACCER,
+    ACER,
     APPLE,
     ASUS,
     DELL,
