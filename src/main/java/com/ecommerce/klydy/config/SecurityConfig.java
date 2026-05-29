@@ -45,6 +45,12 @@ public class SecurityConfig {
                                 "/swagger-ui.html"
                         ).permitAll()
 
+
+                        // TEMPORAL: abierto mientras no hay autenticación
+                        .requestMatchers(HttpMethod.POST, "/productos/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/productos/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/productos/**").permitAll()
+
                         // Endpoints de autenticación: públicos — son la puerta de entrada.
                         .requestMatchers("/auth/**").permitAll()
 
