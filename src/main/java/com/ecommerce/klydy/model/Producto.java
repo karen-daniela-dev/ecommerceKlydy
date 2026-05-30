@@ -9,7 +9,8 @@ import jakarta.validation.constraints.NotNull;
 public class Producto {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productos_seq")
+    @SequenceGenerator(name = "productos_seq", sequenceName = "productos_id_producto_seq", allocationSize = 1)
     private Long idProducto;
 
     @NotBlank(message = "El nombre tiene que estar")
