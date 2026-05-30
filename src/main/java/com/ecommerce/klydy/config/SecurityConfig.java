@@ -47,6 +47,7 @@ public class SecurityConfig {
 
 
                         // TEMPORAL: abierto mientras no hay autenticación
+                        .requestMatchers(HttpMethod.GET,    "/productos/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/productos/**").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/productos/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/productos/**").permitAll()
