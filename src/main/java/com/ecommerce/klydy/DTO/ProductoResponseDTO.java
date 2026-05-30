@@ -15,11 +15,14 @@ public class ProductoResponseDTO {
     private Categoria categoria;
     private Marca marca;
     private Uso uso;
+    private String descripcion;
+    private String urlImagen;
+
 
     public ProductoResponseDTO() {}
 
     public ProductoResponseDTO(Long id, String nombre, Double precio, Integer stock,
-                               Categoria categoria, Marca marca, Uso uso) {
+                               Categoria categoria, Marca marca, Uso uso,String descripcion, String urlImagen) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
@@ -27,6 +30,8 @@ public class ProductoResponseDTO {
         this.categoria = categoria;
         this.marca = marca;
         this.uso = uso;
+        this.descripcion = descripcion;
+        this.urlImagen = urlImagen;
     }
 
     public static ProductoResponseDTO desde(Producto p) {
@@ -37,7 +42,9 @@ public class ProductoResponseDTO {
                 p.getStock(),
                 p.getCategoria(),
                 p.getMarca(),
-                p.getUso()
+                p.getUso(),
+                p.getDescripcion(),
+                p.getUrlImagen()
         );
     }
 
@@ -99,4 +106,9 @@ public class ProductoResponseDTO {
     public void setUso(Uso uso) {
         this.uso = uso;
     }
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+
+    public String getUrlImagen() { return urlImagen; }
+    public void setUrlImagen(String urlImagen) { this.urlImagen = urlImagen; }
 }
