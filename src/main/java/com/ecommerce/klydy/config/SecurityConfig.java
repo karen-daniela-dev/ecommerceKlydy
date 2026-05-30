@@ -61,13 +61,13 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/compras/**").hasAnyRole("ADMIN", "CLIENTE")
 
                         // Modificaciones: solo ADMIN puede crear, actualizar o eliminar.
-                        .requestMatchers(HttpMethod.POST, "/productos/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/productos/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/productos/**").hasRole("ADMIN")
-
-                        .requestMatchers(HttpMethod.POST, "/clientes/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/clientes/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/clientes/**").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.POST, "/productos/**").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.PUT, "/productos/**").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.DELETE, "/productos/**").hasRole("ADMIN")
+//
+//                        .requestMatchers(HttpMethod.POST, "/clientes/**").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.PUT, "/clientes/**").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.DELETE, "/clientes/**").hasRole("ADMIN")
 
                         // Órdenes: CLIENTE puede crear y ver sus propias órdenes.
                         .requestMatchers(HttpMethod.POST, "/compras/**").hasAnyRole("ADMIN", "CLIENTE")
