@@ -29,4 +29,23 @@ public class CloudinaryService {
             throw new RuntimeException("Error subiendo imagen a Cloudinary");
         }
     }
+    public String extraerPublicId(String url) {
+        try {
+            String[] partes = url.split("/upload/");
+            String path = partes[1]; // v1234567/abc123.jpg
+
+            String sinVersion = path.replaceFirst("v\\d+/", ""); // abc123.jpg
+            return sinVersion.substring(0, sinVersion.lastIndexOf(".")); // abc123
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    public void eliminarImagen(String publicId) {
+        try {
+            cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+        } catch (Exception e) {
+            System.out.println("Error eliminando imagen: " + e.getMessage());
+        }
+    }
 }

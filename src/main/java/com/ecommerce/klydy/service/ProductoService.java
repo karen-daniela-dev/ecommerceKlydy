@@ -14,10 +14,13 @@ import java.util.List;
 public class ProductoService {
 
     private final ProductoRepository productoRepository;
+    private final CloudinaryService cloudinaryService;
+
 
     @Autowired
-    public ProductoService(ProductoRepository productoRepository) {
+    public ProductoService(ProductoRepository productoRepository,CloudinaryService cloudinaryService) {
         this.productoRepository = productoRepository;
+        this.cloudinaryService = cloudinaryService;
     }
     private String limpiar(String valor) {
         return valor == null ? null : valor.trim();
@@ -66,15 +69,33 @@ public class ProductoService {
 
         Producto producto = productoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
         if (dto.getStock() < 0) {
             throw new RuntimeException("El stock no puede ser negativo");
         }
 
-        producto.setNombre(dto.getNombre());
+        String urlAnterior = producto.getUrlImagen();
+        String urlNueva = dto.getUrlImagen();
+
+
+        if (urlAnterior != null && (urlNueva == null || !urlAnterior.equals(urlNueva))) {
+
+            if (urlAnterior.contains("cloudinary")) {
+                String publicId = cloudinaryService.extraerPublicId(urlAnterior);
+
+                if (publicId != null) {
+                    cloudinaryService.eliminarImagen(publicId);
+                }
+            }
+        }
+
+
+        // actualizar datos
+        producto.setNombre(limpiar(dto.getNombre()));
         producto.setPrecio(dto.getPrecio());
         producto.setStock(dto.getStock());
-        producto.setDescripcion(dto.getDescripcion());
-        producto.setUrlImagen(dto.getUrlImagen());
+        producto.setDescripcion(limpiar(dto.getDescripcion()));
+        producto.setUrlImagen(limpiar(urlNueva));
         producto.setCategoria(dto.getCategoria());
         producto.setMarca(dto.getMarca());
         producto.setUso(dto.getUso());
@@ -83,10 +104,23 @@ public class ProductoService {
 
         return ProductoResponseDTO.desde(actualizado);
     }
+
+
+
     public void eliminar(Long id) {
 
         Producto producto = productoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+        String url = producto.getUrlImagen();
+
+        if (url != null && url.contains("cloudinary")) {
+            String publicId = cloudinaryService.extraerPublicId(url);
+
+            if (publicId != null) {
+                cloudinaryService.eliminarImagen(publicId);
+            }
+        }
 
         productoRepository.delete(producto);
     }
