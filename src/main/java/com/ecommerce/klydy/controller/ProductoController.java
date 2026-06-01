@@ -3,6 +3,7 @@ package com.ecommerce.klydy.controller;
 import com.ecommerce.klydy.DTO.ProductoRequestDTO;
 import com.ecommerce.klydy.DTO.ProductoResponseDTO;
 import com.ecommerce.klydy.service.ProductoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ public class ProductoController {
     }
 
     @PostMapping
+    @SecurityRequirement(name = "bearerAuth")
     public ProductoResponseDTO crear(@Valid @RequestBody ProductoRequestDTO dto) {
         return productoService.crearProducto(dto);
     }
@@ -37,6 +39,7 @@ public class ProductoController {
 
 
     @PutMapping("/{id}")
+    @SecurityRequirement(name = "bearerAuth")
     public ProductoResponseDTO actualizar(
             @PathVariable Long id,
             @Valid @RequestBody ProductoRequestDTO dto) {
@@ -46,6 +49,7 @@ public class ProductoController {
 
 
     @DeleteMapping("/{id}")
+    @SecurityRequirement(name = "bearerAuth")
     public void eliminar(@PathVariable Long id) {
         productoService.eliminar(id);
     }
