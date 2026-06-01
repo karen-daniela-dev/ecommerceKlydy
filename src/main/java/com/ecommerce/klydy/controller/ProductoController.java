@@ -20,7 +20,7 @@ public class ProductoController {
     }
 
     @PostMapping
-    @SecurityRequirement(name = "bearerAuth")
+
     public ProductoResponseDTO crear(@Valid @RequestBody ProductoRequestDTO dto) {
         return productoService.crearProducto(dto);
     }
@@ -39,7 +39,6 @@ public class ProductoController {
 
 
     @PutMapping("/{id}")
-    @SecurityRequirement(name = "bearerAuth")
     public ProductoResponseDTO actualizar(
             @PathVariable Long id,
             @Valid @RequestBody ProductoRequestDTO dto) {
@@ -49,7 +48,6 @@ public class ProductoController {
 
 
     @DeleteMapping("/{id}")
-    @SecurityRequirement(name = "bearerAuth")
     public void eliminar(@PathVariable Long id) {
         productoService.eliminar(id);
     }

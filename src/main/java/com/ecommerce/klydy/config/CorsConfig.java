@@ -8,15 +8,14 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 public class CorsConfig {
+
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
 
         // Permite solicitudes desde cualquier origen.
         // En producción esto se restringe al dominio del frontend.
-//        config.addAllowedOriginPattern("*");
-        config.addAllowedOrigin("https://ecommerceklydy.onrender.com");
-        config.addAllowedOrigin("http://localhost:5500");
+        config.addAllowedOriginPattern("*");
 
         // Permite los métodos HTTP que usa el frontend.
         config.addAllowedMethod("GET");
@@ -30,7 +29,7 @@ public class CorsConfig {
         //config.addAllowedOrigin("https://mifrontend.com");
 
         // Permite que el navegador lea el header Authorization en las respuestas.
-        config.setAllowCredentials(true);
+        config.setAllowCredentials(false);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
@@ -40,3 +39,4 @@ public class CorsConfig {
         return new CorsFilter(source);
     }
 }
+
