@@ -47,7 +47,7 @@ public class SecurityConfig {
 
 
 //                        // TEMPORAL: abierto mientras no hay autenticación
-//                        .requestMatchers(HttpMethod.GET,    "/productos/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,    "/productos/**").permitAll()
 //                        .requestMatchers(HttpMethod.POST, "/productos/**").permitAll()
 //                        .requestMatchers(HttpMethod.PUT, "/productos/**").permitAll()
 //                        .requestMatchers(HttpMethod.DELETE, "/productos/**").permitAll()
@@ -56,7 +56,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
 
                         // Consultas (GET): accesibles para CLIENTE y ADMIN.
-                        .requestMatchers(HttpMethod.GET, "/productos/**").hasAnyRole("ADMIN", "CLIENTE")
+//                        .requestMatchers(HttpMethod.GET, "/productos/**").hasAnyRole("ADMIN", "CLIENTE")
                         .requestMatchers(HttpMethod.GET, "/clientes/**").hasAnyRole("ADMIN", "CLIENTE")
                         .requestMatchers(HttpMethod.GET, "/compras/**").hasAnyRole("ADMIN", "CLIENTE")
 
