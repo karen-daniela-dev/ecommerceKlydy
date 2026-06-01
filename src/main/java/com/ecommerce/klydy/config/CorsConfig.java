@@ -14,7 +14,9 @@ public class CorsConfig {
 
         // Permite solicitudes desde cualquier origen.
         // En producción esto se restringe al dominio del frontend.
-        config.addAllowedOriginPattern("*");
+//        config.addAllowedOriginPattern("*");
+        config.addAllowedOrigin("https://ecommerceklydy.onrender.com");
+        config.addAllowedOrigin("http://localhost:5500");
 
         // Permite los métodos HTTP que usa el frontend.
         config.addAllowedMethod("GET");
@@ -28,7 +30,7 @@ public class CorsConfig {
         //config.addAllowedOrigin("https://mifrontend.com");
 
         // Permite que el navegador lea el header Authorization en las respuestas.
-        config.setAllowCredentials(false);
+        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
