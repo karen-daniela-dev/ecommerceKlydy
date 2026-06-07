@@ -45,6 +45,9 @@ public class SecurityConfig {
                                 "/swagger-ui.html"
                         ).permitAll()
 
+                                // Chat: público, no requiere autenticación
+                                .requestMatchers(HttpMethod.POST, "/api/chat").permitAll()
+
 
 //                        // TEMPORAL: abierto mientras no hay autenticación
                         .requestMatchers(HttpMethod.GET,    "/productos/**").permitAll()
