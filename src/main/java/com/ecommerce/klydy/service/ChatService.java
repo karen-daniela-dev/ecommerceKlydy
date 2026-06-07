@@ -20,7 +20,7 @@ public class ChatService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private static final String GEMINI_URL =
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=";
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=";
 
     private static final String BACKEND_PRODUCTOS_URL =
             "https://ecommerceklydy.onrender.com/productos";
