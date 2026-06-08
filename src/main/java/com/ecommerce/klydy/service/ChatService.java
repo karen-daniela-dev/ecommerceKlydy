@@ -51,9 +51,14 @@ public class ChatService {
             int stockInt = stock instanceof Number ? ((Number) stock).intValue() : 0;
             if (stockInt <= 0) continue;
 
-            catalogo.append("ID: ").append(p.get("id"))
+            Object precioObj = p.get("precio");
+            long precio = precioObj instanceof Number ? ((Number) precioObj).longValue() : 0;
+            String precioFormateado = String.format("%,.0f", (double) precio)
+                    .replace(",", ".");
+
+            catalogo.append("ID: ").append(p.get("id_producto"))
                     .append(" | Nombre: ").append(p.get("nombre"))
-                    .append(" | Precio: ").append(p.get("precio"))
+                    .append(" | Precio: $").append(precioFormateado)
                     .append(" | Categoría: ").append(p.get("categoria"))
                     .append(" | Marca: ").append(p.get("marca"))
                     .append(" | Uso: ").append(p.get("uso"))
@@ -69,7 +74,9 @@ public class ChatService {
                 "- Filtra por presupuesto, uso y categoría según lo que pida el usuario\n" +
                 "- Muestra los precios en formato colombiano (ej. $2.000.000)\n" +
                 "- Máximo 2 emojis por respuesta\n" +
-                "- Sin markdown, sin asteriscos, sin negrillas\n" +
+
+                "- NUNCA uses *, **, #, listas con guiones ni ningún formato markdown\n" +
+                "- Escribe texto plano únicamente, como si fuera un mensaje de WhatsApp\n" +
                 "- Respuestas máximo 5 frases\n" +
                 "- Si ya hay historial previo, no te vuelvas a presentar\n\n" +
 
