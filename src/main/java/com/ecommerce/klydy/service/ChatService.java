@@ -19,9 +19,9 @@ public class ChatService {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    // — modelo estable sin razonamiento
     private static final String GEMINI_URL =
-
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=";
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=";
 
     private static final String BACKEND_PRODUCTOS_URL =
             "https://ecommerceklydy.onrender.com/productos";
@@ -45,40 +45,47 @@ public class ChatService {
 
     private String buildSystemPrompt(List<Map<String, Object>> productos) {
         StringBuilder catalogo = new StringBuilder();
+        catalogo.append("CATÁLOGO ACTUAL (solo estos productos existen):\n");
 
         for (Map<String, Object> p : productos) {
             Object stock = p.get("stock");
             int stockInt = stock instanceof Number ? ((Number) stock).intValue() : 0;
             if (stockInt <= 0) continue;
 
+            //  — precio formateado en COP
             Object precioObj = p.get("precio");
             long precio = precioObj instanceof Number ? ((Number) precioObj).longValue() : 0;
-            String precioFormateado = String.format("%,.0f", (double) precio)
-                    .replace(",", ".");
+            String precioFormateado = String.format("%,.0f", (double) precio).replace(",", ".");
 
-            catalogo.append("ID: ").append(p.get("id_producto"))
-                    .append(" | Nombre: ").append(p.get("nombre"))
-                    .append(" | Precio: $").append(precioFormateado)
-                    .append(" | Categoría: ").append(p.get("categoria"))
-                    .append(" | Marca: ").append(p.get("marca"))
-                    .append(" | Uso: ").append(p.get("uso"))
-                    .append(" | Stock: ").append(stockInt)
+            // formato id=X igual al que Gemini interpreta correctamente
+            catalogo.append("- id=").append(p.get("id_producto"))
+                    .append(" | ").append(p.get("nombre"))
+                    .append(" | ").append(p.get("marca"))
+                    .append(" | ").append(p.get("categoria"))
+                    .append(" | uso=").append(p.get("uso"))
+                    .append(" | $").append(precioFormateado)
+                    .append(" | stock=").append(stockInt)
                     .append("\n");
         }
 
         return "Eres Klydy, asistente de compras de Klydy Tech, tienda colombiana de tecnología. " +
-                "Eres amable, carismático y directo.\n\n" +
+                "Eres amable, carismático y directo. Responde siempre en español.\n\n" +
 
                 "REGLAS GENERALES:\n" +
                 "- Recomienda solo productos del catálogo con stock > 0\n" +
                 "- Filtra por presupuesto, uso y categoría según lo que pida el usuario\n" +
                 "- Muestra los precios en formato colombiano (ej. $2.000.000)\n" +
                 "- Máximo 2 emojis por respuesta\n" +
-
                 "- NUNCA uses *, **, #, listas con guiones ni ningún formato markdown\n" +
                 "- Escribe texto plano únicamente, como si fuera un mensaje de WhatsApp\n" +
                 "- Respuestas máximo 5 frases\n" +
-                "- Si ya hay historial previo, no te vuelvas a presentar\n\n" +
+                "- Si ya hay historial previo, no te vuelvas a presentar\n" +
+                "- No inventes productos, precios ni stock: usa SOLO el catálogo\n\n" +
+
+                "PRESUPUESTO:\n" +
+                "- Pregunta el presupuesto si el usuario no lo menciona\n" +
+                "- Si menciona solo un número como 2000, interpreta como $2.000 exactos, no millones\n" +
+                "- Suma precios al recomendar varios y avisa si se pasa del presupuesto\n\n" +
 
                 "PERFILES DE USO:\n" +
                 "- GAMER: TARJETAS_GRAFICAS, LAPTOPS, TECLADOS, MOUSES\n" +
@@ -88,12 +95,13 @@ public class ChatService {
 
                 "AGREGAR AL CARRITO (MUY IMPORTANTE):\n" +
                 "- NUNCA agregues un producto sin confirmación explícita del usuario\n" +
-                "- Cuando el usuario confirme que quiere agregar, responde ÚNICAMENTE con la(s) línea(s):\n" +
+                "- Confirmaciones válidas: sí, dale, agrégalo, listo, confirmo\n" +
+                "- Cuando el usuario confirme, responde ÚNICAMENTE con la(s) línea(s), sin texto adicional:\n" +
                 "  [[CART_ADD:{\"id\":\"X\",\"qty\":1}]]\n" +
+                "- Usa el id exacto del catálogo (el número después de id=)\n" +
                 "- Si son varios productos, una línea por cada uno, nada más\n" +
-                "- Solo usa IDs que aparezcan en el catálogo\n\n" +
+                "- Para recomendar o conversar, NUNCA uses [[CART_ADD]]\n\n" +
 
-                "CATÁLOGO DISPONIBLE (solo productos con stock):\n" +
                 catalogo;
     }
 
@@ -113,30 +121,21 @@ public class ChatService {
         // Convertir historial al formato de Gemini
         List<Map<String, Object>> contents = new ArrayList<>();
 
-        // Inyectar el system prompt como primer turno de usuario + respuesta vacía del modelo
-        Map<String, Object> sysUserTurn = new HashMap<>();
-        sysUserTurn.put("role", "user");
-        sysUserTurn.put("parts", List.of(Map.of("text", systemPrompt)));
-        contents.add(sysUserTurn);
-
-        Map<String, Object> sysModelTurn = new HashMap<>();
-        sysModelTurn.put("role", "model");
-        sysModelTurn.put("parts", List.of(Map.of("text", "Entendido. Estoy listo para ayudar a los clientes de Klydy Tech.")));
-        contents.add(sysModelTurn);
-
-        // Agregar el historial del usuario
         for (Map<String, Object> msg : historial) {
             String role = (String) msg.get("role");
             String text = (String) msg.get("content");
 
-            // Gemini usa "model" en vez de "assistant"
-            String geminiRole = "assistant".equals(role) ? "model" : role;
+            String geminiRole = "assistant".equals(role) ? "model" : "user";
 
             Map<String, Object> turn = new HashMap<>();
             turn.put("role", geminiRole);
             turn.put("parts", List.of(Map.of("text", text != null ? text : "")));
             contents.add(turn);
         }
+
+        // systemInstruction separado como lo hace Gemini correctamente
+        Map<String, Object> systemInstruction = new HashMap<>();
+        systemInstruction.put("parts", List.of(Map.of("text", systemPrompt)));
 
         // Configuración de generación
         Map<String, Object> generationConfig = new HashMap<>();
@@ -145,6 +144,7 @@ public class ChatService {
 
         // Body de la petición
         Map<String, Object> body = new HashMap<>();
+        body.put("systemInstruction", systemInstruction);
         body.put("contents", contents);
         body.put("generationConfig", generationConfig);
 
@@ -160,12 +160,14 @@ public class ChatService {
 
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
                 Map<String, Object> responseBody = response.getBody();
-                List<Map<String, Object>> candidates = (List<Map<String, Object>>) responseBody.get("candidates");
+                List<Map<String, Object>> candidates =
+                        (List<Map<String, Object>>) responseBody.get("candidates");
 
                 if (candidates != null && !candidates.isEmpty()) {
                     Map<String, Object> candidate = candidates.get(0);
                     Map<String, Object> content = (Map<String, Object>) candidate.get("content");
-                    List<Map<String, Object>> parts = (List<Map<String, Object>>) content.get("parts");
+                    List<Map<String, Object>> parts =
+                            (List<Map<String, Object>>) content.get("parts");
 
                     if (parts != null && !parts.isEmpty()) {
                         return (String) parts.get(0).get("text");
