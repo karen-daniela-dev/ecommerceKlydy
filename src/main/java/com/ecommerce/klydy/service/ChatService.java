@@ -65,7 +65,7 @@ public class ChatService {
             String precioFormateado = String.format("%,.0f", (double) precio).replace(",", ".");
 
             // formato id=X igual al que Gemini interpreta correctamente
-            catalogo.append("- id=").append(p.get("id_producto"))
+            catalogo.append("- id=").append(p.get("id"))
                     .append(" | ").append(p.get("nombre"))
                     .append(" | ").append(p.get("marca"))
                     .append(" | ").append(p.get("categoria"))
