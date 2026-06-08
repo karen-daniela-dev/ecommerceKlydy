@@ -33,7 +33,14 @@ public class ChatService {
         try {
             ResponseEntity<List> response = restTemplate.getForEntity(BACKEND_PRODUCTOS_URL, List.class);
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-                return (List<Map<String, Object>>) response.getBody();
+                List<Map<String, Object>> productos = (List<Map<String, Object>>) response.getBody();
+
+                // ← AGREGA ESTE LOG TEMPORAL
+                if (!productos.isEmpty()) {
+                    System.out.println("PRIMER PRODUCTO: " + productos.get(0));
+                }
+
+                return productos;
             }
         } catch (Exception e) {
             System.err.println("Error al obtener productos: " + e.getMessage());
